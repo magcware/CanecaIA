@@ -3,6 +3,7 @@ import base64
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.config import VALID_CATEGORIES
 from app.openai_service import classify_image
 from app.mqtt_client import publish_result
 
@@ -43,6 +44,11 @@ async def classify(file: UploadFile = File(...)):
         result = classify_image(
             base64_image
         )
+
+        if result not in VALID_CATEGORIES:
+            raise ValueError(
+                f"Categoría no válida: {result}"
+            )
 
         # Publicar resultado MQTT
         publish_result(result)
