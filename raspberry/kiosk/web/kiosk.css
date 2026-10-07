@@ -1,0 +1,290 @@
+:root {
+  color-scheme: dark;
+  --bg: #07110e;
+  --ink: #f4f7f2;
+  --muted: #c5d5c8;
+  --accent: #d6ff4a;
+  --blue: #7eb6ff;
+  --green: #8ee0ae;
+  --black: #f4f4f4;
+  --danger: #ffb4a8;
+  font-family: "Segoe UI", "Avenir Next", "Trebuchet MS", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(214, 255, 74, 0.14), transparent 32%),
+    var(--bg);
+  color: var(--ink);
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  user-select: none;
+  cursor: default;
+}
+
+body[data-color="blue"] {
+  background:
+    radial-gradient(circle at 70% 55%, rgba(47, 128, 237, 0.28), transparent 34%),
+    var(--bg);
+}
+
+body[data-color="green"] {
+  background:
+    radial-gradient(circle at 70% 55%, rgba(33, 150, 83, 0.3), transparent 34%),
+    var(--bg);
+}
+
+body[data-color="black"] {
+  background:
+    radial-gradient(circle at 70% 55%, rgba(255, 255, 255, 0.08), transparent 34%),
+    var(--bg);
+}
+
+.live {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+  background: #000;
+}
+
+body:not([data-state="waiting"]):not([data-state="detected"]) .live {
+  opacity: 0;
+}
+
+body[data-state="detected"]::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  border: 12px solid #d6ff4a;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.brand {
+  position: relative;
+  z-index: 2;
+  padding: 28px 40px 0;
+  font-size: clamp(1rem, 2vw, 1.35rem);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+body[data-state="waiting"] .brand,
+body[data-state="detected"] .brand {
+  color: #ffffff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+  background: linear-gradient(rgba(0, 0, 0, 0.55), transparent);
+  padding-bottom: 28px;
+}
+
+#stage {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  padding: 24px 40px 48px;
+}
+
+body[data-state="waiting"] #stage,
+body[data-state="detected"] #stage {
+  align-items: end;
+  justify-items: stretch;
+  padding: 0;
+}
+
+body[data-state="waiting"] .panel,
+body[data-state="detected"] .panel {
+  width: 100%;
+}
+
+body[data-state="waiting"] h1,
+body[data-state="detected"] h1 {
+  width: 100%;
+  max-width: none;
+  padding: 64px 56px 40px;
+  font-size: clamp(2rem, 4.2vw, 3.5rem);
+  background: linear-gradient(transparent, rgba(5, 10, 8, 0.9) 32%);
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.55);
+}
+
+.panel {
+  width: min(1180px, 100%);
+  display: grid;
+  justify-items: center;
+  text-align: center;
+  gap: 28px;
+  animation: rise 0.45s ease;
+}
+
+h1 {
+  margin: 0;
+  max-width: 14em;
+  color: #ffffff;
+  font-size: clamp(2.4rem, 5.6vw, 5.1rem);
+  line-height: 1.05;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.halo {
+  width: min(280px, 42vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 14px solid #d6ff4a;
+  box-shadow: 0 0 0 22px rgba(214, 255, 74, 0.28), 0 0 70px rgba(214, 255, 74, 0.35);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+.flash {
+  width: min(180px, 28vw);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pop 0.7s ease;
+}
+
+.split {
+  width: min(1180px, 100%);
+  display: grid;
+  grid-template-columns: minmax(260px, 0.9fr) minmax(260px, 1.1fr);
+  gap: 48px;
+  align-items: center;
+}
+
+.photo-frame {
+  position: relative;
+  border-radius: 32px;
+  overflow: hidden;
+  background: #10211b;
+  min-height: 280px;
+  aspect-ratio: 4 / 3;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+}
+
+.photo-frame img,
+.bin-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.photo-frame.busy::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border: 8px solid rgba(214, 255, 74, 0.18);
+  border-top-color: var(--accent);
+  border-radius: 32px;
+  animation: spin 0.9s linear infinite;
+}
+
+.dots {
+  display: flex;
+  gap: 14px;
+  height: 22px;
+}
+
+.dots i {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: bounce 0.9s ease-in-out infinite;
+}
+
+.dots i:nth-child(2) { animation-delay: 0.15s; }
+.dots i:nth-child(3) { animation-delay: 0.3s; }
+
+.result-copy {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.label {
+  margin: 0;
+  font-size: clamp(3rem, 7vw, 6.4rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.label.blue { color: var(--blue); }
+.label.green { color: var(--green); }
+.label.black { color: var(--black); }
+
+.bin-wrap {
+  width: min(460px, 88%);
+  aspect-ratio: 360 / 520;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.16), transparent 68%);
+}
+
+.bin-wrap img { object-fit: contain; }
+
+.thanks h1 { font-size: clamp(3rem, 8vw, 7rem); max-width: 10em; }
+
+.error h1 { color: var(--danger); }
+
+@keyframes pulse {
+  0%, 100% { transform: scale(0.94); opacity: 0.8; }
+  50% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pop {
+  0% { transform: scale(0.4); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.4; }
+  50% { transform: translateY(-8px); opacity: 1; }
+}
+
+@keyframes rise {
+  from { transform: translateY(18px); }
+  to { transform: none; }
+}
+
+@media (max-width: 860px) {
+  .split { grid-template-columns: 1fr; gap: 24px; }
+  .brand { padding: 20px 20px 0; }
+  body[data-state="waiting"] .brand,
+  body[data-state="detected"] .brand { padding-bottom: 20px; }
+  #stage { padding: 16px 20px 28px; }
+  body[data-state="waiting"] #stage,
+  body[data-state="detected"] #stage { padding: 0; }
+  body[data-state="waiting"] h1,
+  body[data-state="detected"] h1 { padding: 48px 20px 28px; }
+  .bin-wrap { width: min(220px, 54vw); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::after {
+    animation: none !important;
+  }
+}

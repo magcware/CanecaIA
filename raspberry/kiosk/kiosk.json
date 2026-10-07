@@ -1,0 +1,14 @@
+{
+    "host": "127.0.0.1",
+    "port": 8765,
+    "open_browser": true,
+    "detected_seconds": 1.8,
+    "result_seconds": 6,
+    "thanks_seconds": 3.5,
+    "error_seconds": 4,
+    "bins": {
+        "blue": "assets/bins/blue.svg",
+        "green": "assets/bins/green.svg",
+        "black": "assets/bins/black.svg"
+    }
+}
